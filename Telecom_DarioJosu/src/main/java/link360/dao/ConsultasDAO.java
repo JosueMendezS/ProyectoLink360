@@ -142,7 +142,7 @@ public class ConsultasDAO {
                 + "tp.PorcentajeMaximo, p.FechaInicio, p.FechaFin, "
                 + "DATEDIFF(DAY, GETDATE(), p.FechaFin) AS DiasRestantes "
                 + "FROM Promocion p "
-                + "INNER JOIN Tipo_Promo tp ON p.IdTipoPromo = tp.IdTipoPromo "
+                + "INNER JOIN Tipo_Promo tp ON p.IdTipoPromo = tp.IdConcepto "
                 + "WHERE p.FechaFin >= GETDATE() "
                 + "ORDER BY p.FechaFin";
 
@@ -198,26 +198,22 @@ public class ConsultasDAO {
 
     /**
      *
-     * AUDIT – Reads audit trail columns (CreatedBy, CreatedAt, UpdatedBy,
-     * UpdatedAt, Estado)
+     * AUDIT – Reads audit trail columns (UsuarioCreacion, FechaCreacion, Estado)
      *
      * from the Cliente table as a sample of the audit mechanism.
      *
      */
     public static final String[] HEADERS_AUDIT
-            = {"Cédula", "Nombre", "Tipo", "Creado Por", "Fecha Creación",
-                "Modificado Por", "Fecha Modificación", "Estado Registro"};
+            = {"Cédula", "Nombre", "Tipo", "Creado Por", "Fecha Creación", "Estado Registro"};
 
     public List<Object[]> queryAuditTrail() throws SQLException, ClassNotFoundException {
 
         String sql
                 = "SELECT c.Cedula, c.Nombre + ' ' + c.Apellidos AS Nombre, c.TipoCliente, "
-                + "c.CreatedBy, CONVERT(VARCHAR,c.CreatedAt,120) AS FechaCreacion, "
-                + "ISNULL(c.UpdatedBy,'—') AS UpdatedBy, "
-                + "ISNULL(CONVERT(VARCHAR,c.UpdatedAt,120),'—') AS FechaModificacion, "
-                + "c.EstadoRegistro "
+                + "c.UsuarioCreacion, CONVERT(VARCHAR,c.FechaCreacion,120) AS FechaCreacion, "
+                + "c.Estado "
                 + "FROM Cliente c "
-                + "ORDER BY c.CreatedAt DESC";
+                + "ORDER BY c.FechaCreacion DESC";
 
         return executeQuery(sql);
 
