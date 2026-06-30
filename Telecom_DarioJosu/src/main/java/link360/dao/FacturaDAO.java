@@ -180,10 +180,6 @@ public class FacturaDAO {
 
         f.setNumTelefonico(rs.getString("NumTelefonico"));
 
-        f.setFecha(rs.getString("Fecha"));
-
-        f.setFechaVencimiento(rs.getString("FechaVencimiento"));
-
         f.setMonto(rs.getDouble("Monto"));
 
         f.setImpuestos(rs.getDouble("Impuestos"));
@@ -194,7 +190,14 @@ public class FacturaDAO {
 
         f.setMontoFinal(rs.getDouble("MontoFinal"));
 
-        f.setFechaPago(rs.getString("FechaPago"));
+        Date fecha = rs.getDate("Fecha");
+        f.setFecha(fecha != null ? fecha.toString() : "");
+        
+        Date fechaVenc = rs.getDate("FechaVencimiento");
+        f.setFechaVencimiento(fechaVenc != null ? fechaVenc.toString() : "");
+        
+        Date fechaPago = rs.getDate("FechaPago");
+        f.setFechaPago(fechaPago != null ? fechaPago.toString() : null);
 
         f.setEstadoPago(rs.getString("EstadoPago"));
 

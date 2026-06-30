@@ -162,7 +162,8 @@ public class LineaMovilDAO {
 
         lm.setTecnologia(rs.getString("Tecnologia"));
 
-        lm.setFechaActivacion(rs.getString("FechaActivacion"));
+        Date fa = rs.getDate("FechaActivacion");
+        lm.setFechaActivacion(fa != null ? fa.toString() : "");
 
         lm.setEstadoLinea(rs.getString("Estado_Linea"));
 

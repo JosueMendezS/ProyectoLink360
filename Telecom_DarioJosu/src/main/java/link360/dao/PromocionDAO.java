@@ -50,7 +50,11 @@ public class PromocionDAO {
 
             ps.setDate(4, Date.valueOf(p.getFechaInicio()));
 
-            ps.setDate(5, Date.valueOf(p.getFechaFin()));
+            if (p.getFechaFin() == null || p.getFechaFin().trim().isEmpty()) {
+                ps.setNull(5, Types.DATE);
+            } else {
+                ps.setDate(5, Date.valueOf(p.getFechaFin()));
+            }
 
             ps.setDouble(6, p.getPctDescuento());
             ps.setInt(7, p.getIdTipoPromo());
@@ -110,8 +114,11 @@ public class PromocionDAO {
 
             ps.setDate(3, Date.valueOf(p.getFechaInicio()));
 
-            ps.setDate(4, Date.valueOf(p.getFechaFin()));
-
+            if (p.getFechaFin() == null || p.getFechaFin().trim().isEmpty()) {
+                ps.setNull(4, Types.DATE);
+            } else {
+                ps.setDate(4, Date.valueOf(p.getFechaFin()));
+            }
             ps.setDouble(5, p.getPctDescuento());
             ps.setInt(6, p.getIdTipoPromo());
 
@@ -136,12 +143,17 @@ public class PromocionDAO {
 
     }
 
-    private Promocion mapRow(ResultSet rs) throws SQLException {
-
-        return new Promocion(rs.getString("CodPromocion"), rs.getString("Nombre"),
-                rs.getString("Descripcion"), rs.getString("FechaInicio"),
-                rs.getString("FechaFin"), rs.getDouble("PctDescuento"), rs.getInt("IdTipoPromo"));
-
-    }
+    private Promocion mapRow(ResultSet rs) throws SQLException { 
+    Date fi = rs.getDate("FechaInicio"); 
+    Date ff = rs.getDate("FechaFin"); 
+    return new Promocion( 
+            rs.getString("CodPromocion"), 
+            rs.getString("Nombre"), 
+            rs.getString("Descripcion"), 
+            fi != null ? fi.toString() : "", 
+            ff != null ? ff.toString() : null, 
+            rs.getDouble("PctDescuento"), 
+            rs.getInt("IdTipoPromo")); 
+}
 
 }
