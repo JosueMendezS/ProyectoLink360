@@ -3,11 +3,13 @@ package link360.ui;
 import link360.dao.PromocionDAO;
 import link360.model.Promocion;
 import link360.util.ErrorHandler;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * CRUD panel for the Promocion table. IdTipoPromo FK resolved via JComboBox.
@@ -60,7 +62,7 @@ public class PromocionPanel extends JPanel {
         addField(p, gbc, "Nombre *", txtNombre, 0, 2);
         addField(p, gbc, "Tipo Promo *", cmbTipoPromo, 0, 4);
         addField(p, gbc, "Fecha Inicio *\n(YYYY-MM-DD)", txtFechaInicio, 1, 0);
-        addField(p, gbc, "Fecha Fin *\n(YYYY-MM-DD)", txtFechaFin, 1, 2);
+        addField(p, gbc, "Fecha Fin\n(YYYY-MM-DD, opcional)", txtFechaFin, 1, 2);
         addField(p, gbc, "% Descuento *", txtPctDescuento, 1, 4);
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -96,9 +98,15 @@ public class PromocionPanel extends JPanel {
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(24);
-        table.getTableHeader().setBackground(new Color(39, 174, 96));
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.getTableHeader().setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setBackground(new Color(41, 128, 185)); 
+        headerRenderer.setForeground(Color.WHITE);             
+        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); 
+
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        table.getTableHeader().setDefaultRenderer(headerRenderer);
+
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 populateFormFromTable();
@@ -161,7 +169,8 @@ public class PromocionPanel extends JPanel {
         txtNombre.setText(str(tableModel.getValueAt(row, 1)));
         txtDescripcion.setText(str(tableModel.getValueAt(row, 2)));
         txtFechaInicio.setText(str(tableModel.getValueAt(row, 3)));
-        txtFechaFin.setText(str(tableModel.getValueAt(row, 4)));
+        Object ff = tableModel.getValueAt(row, 4);
+        txtFechaFin.setText(ff != null ? ff.toString() : "");
         txtPctDescuento.setText(str(tableModel.getValueAt(row, 5)));
         int tipo = (int) tableModel.getValueAt(row, 6);
         cmbTipoPromo.setSelectedIndex(tipo - 1);
@@ -241,13 +250,35 @@ public class PromocionPanel extends JPanel {
         String fi = txtFechaInicio.getText().trim();
         String ff = txtFechaFin.getText().trim();
         String pctS = txtPctDescuento.getText().trim();
-        if (cod.isEmpty() || nom.isEmpty() || fi.isEmpty() || ff.isEmpty() || pctS.isEmpty()) {
+        if (cod.isEmpty() || nom.isEmpty() || fi.isEmpty() || pctS.isEmpty()) {
             JOptionPane.showMessageDialog(this, "⚠ Todos los campos marcados con * son obligatorios.", "Campos requeridos", JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        for (String d : new String[]{fi, ff}) {
-            if (!d.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                JOptionPane.showMessageDialog(this, "⚠ Las fechas deben tener formato YYYY-MM-DD.", "Formato inválido", JOptionPane.WARNING_MESSAGE);
+        LocalDate ldFi;
+        try {
+            ldFi = LocalDate.parse(fi);
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "⚠ La Fecha de Inicio no es válida. Use formato YYYY-MM-DD.",
+                    "Fecha inválida", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
+        String ffFinal = null;
+        if (!ff.isEmpty()) {
+            try {
+                LocalDate ldFf = LocalDate.parse(ff);
+                if (ldFf.isBefore(ldFi)) {
+                    JOptionPane.showMessageDialog(this,
+                            "⚠ La Fecha de Fin no puede ser anterior a la Fecha de Inicio.",
+                            "Fechas inválidas", JOptionPane.WARNING_MESSAGE);
+                    return null;
+                }
+                ffFinal = ff;
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "⚠ La Fecha de Fin no es válida. Use YYYY-MM-DD o déjela vacía.",
+                        "Fecha inválida", JOptionPane.WARNING_MESSAGE);
                 return null;
             }
         }
@@ -258,7 +289,7 @@ public class PromocionPanel extends JPanel {
                 return null;
             }
             int tipo = cmbTipoPromo.getSelectedIndex() + 1;
-            return new Promocion(cod, nom, txtDescripcion.getText().trim(), fi, ff, pct, tipo);
+            return new Promocion(cod, nom, txtDescripcion.getText().trim(), fi, ffFinal, pct, tipo);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "⚠ El porcentaje debe ser un número válido.", "Formato inválido", JOptionPane.WARNING_MESSAGE);
             return null;

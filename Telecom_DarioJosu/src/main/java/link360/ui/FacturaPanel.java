@@ -5,11 +5,13 @@ import link360.dao.LineaMovilDAO;
 import link360.model.Factura;
 import link360.model.LineaMovil;
 import link360.util.ErrorHandler;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * CRUD panel for the Factura table. FK NumTelefonico is resolved via JComboBox
@@ -101,9 +103,14 @@ public class FacturaPanel extends JPanel {
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(24);
-        table.getTableHeader().setBackground(new Color(142, 68, 173));
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.getTableHeader().setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setBackground(new Color(41, 128, 185)); 
+        headerRenderer.setForeground(Color.WHITE);             
+        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); 
+
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        table.getTableHeader().setDefaultRenderer(headerRenderer);
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 populateFormFromTable();
@@ -274,12 +281,24 @@ public class FacturaPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "⚠ Línea, Fechas, Monto, Impuestos y Monto Final son obligatorios.", "Campos requeridos", JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        for (String d : new String[]{fecha, fechaV}) {
-            if (!d.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                JOptionPane.showMessageDialog(this, "⚠ Las fechas deben tener formato YYYY-MM-DD.", "Formato inválido", JOptionPane.WARNING_MESSAGE);
-                return null;
-            }
+        LocalDate ldFecha, ldFechaV;
+        try {
+            ldFecha = LocalDate.parse(fecha);
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "⚠ La Fecha de Factura no es válida. Use formato YYYY-MM-DD.",
+                    "Fecha inválida", JOptionPane.WARNING_MESSAGE);
+            return null;
         }
+        try {
+            ldFechaV = LocalDate.parse(fechaV);
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "⚠ La Fecha de Vencimiento no es válida. Use formato YYYY-MM-DD.",
+                    "Fecha inválida", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
         try {
             double monto = Double.parseDouble(montoS);
             double imp = Double.parseDouble(impS);

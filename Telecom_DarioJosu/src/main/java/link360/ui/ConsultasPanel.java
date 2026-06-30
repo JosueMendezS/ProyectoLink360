@@ -2,7 +2,7 @@ package link360.ui;
 
 import link360.dao.ConsultasDAO;
 import link360.util.ErrorHandler;
-
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -130,12 +130,19 @@ public class ConsultasPanel extends JPanel {
                 return false;
             }
         };
+        
         table = new JTable(tableModel);
         table.setRowHeight(24);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table.getTableHeader().setBackground(new Color(44, 62, 80));
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.getTableHeader().setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
+        
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setBackground(new Color(44, 62, 80)); 
+        headerRenderer.setForeground(Color.WHITE);           
+        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); 
+        
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        
+        table.getTableHeader().setDefaultRenderer(headerRenderer);
 
         p.add(lblQueryTitle, BorderLayout.NORTH);
         p.add(new JScrollPane(table), BorderLayout.CENTER);

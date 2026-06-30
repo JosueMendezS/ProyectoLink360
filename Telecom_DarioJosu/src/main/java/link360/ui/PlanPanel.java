@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * CRUD panel for the Plan_Tarifario table. IdCateg FK is chosen via a JComboBox
@@ -101,9 +102,14 @@ public class PlanPanel extends JPanel {
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(24);
-        table.getTableHeader().setBackground(new Color(52, 73, 94));
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.getTableHeader().setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+       headerRenderer.setBackground(new Color(41, 128, 185)); 
+        headerRenderer.setForeground(Color.WHITE);             
+        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); 
+
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        table.getTableHeader().setDefaultRenderer(headerRenderer);
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 populateFormFromTable();

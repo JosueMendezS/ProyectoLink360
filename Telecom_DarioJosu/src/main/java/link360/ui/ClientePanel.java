@@ -7,7 +7,7 @@ import link360.model.Distrito;
 import link360.util.ErrorHandler;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -110,9 +110,14 @@ public class ClientePanel extends JPanel {
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(24);
-        table.getTableHeader().setBackground(new Color(41, 128, 185));
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.getTableHeader().setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
+DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+headerRenderer.setBackground(new Color(41, 128, 185)); // Color azul de fondo
+headerRenderer.setForeground(Color.WHITE);             // Letra blanca
+headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); // Letra negrita
+
+headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+table.getTableHeader().setDefaultRenderer(headerRenderer);
 
         // When the user clicks a row, populate the form
         table.getSelectionModel().addListSelectionListener(e -> {
