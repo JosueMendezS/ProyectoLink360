@@ -5,6 +5,8 @@ import link360.dao.DistritoDAO;
 import link360.model.Cliente;
 import link360.model.Distrito;
 import link360.util.ErrorHandler;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -319,13 +321,30 @@ public class ClientePanel extends JPanel {
                     "Formato inválido", JOptionPane.WARNING_MESSAGE);
             return null;
         }
+        try {
+            LocalDate.parse(fecha);
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "⚠ La fecha ingresada no es válida (por ejemplo 2025-02-30 no existe).",
+                    "Fecha inválida", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
         if (dist == null) {
             JOptionPane.showMessageDialog(this, "⚠ Seleccione un distrito.",
                     "Campos requeridos", JOptionPane.WARNING_MESSAGE);
             return null;
         }
+
+        if (!cedula.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this,
+                    "⚠ La cédula debe contener solo dígitos numéricos (sin guiones ni espacios).",
+                    "Formato inválido", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+
         return new Cliente(cedula, nombre, apellidos, fecha, tipo,
                 dir.isEmpty() ? null : dir, dist.getCodDistrito());
+
     }
 
     // ── Helper ────────────────────────────────────────────────────────────────

@@ -5,6 +5,8 @@ import link360.dao.LineaMovilDAO;
 import link360.model.Cliente;
 import link360.model.LineaMovil;
 import link360.util.ErrorHandler;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -54,7 +56,7 @@ public class LineaMovilPanel extends JPanel {
         txtFechaActivacion = new JTextField(10);
         cmbCliente = new JComboBox<>();
         cmbTipoLinea = new JComboBox<>(new String[]{"Postpago", "Prepago", "Empresarial"});
-        cmbTecnologia = new JComboBox<>(new String[]{"4G", "5G", "3G"});
+        cmbTecnologia = new JComboBox<>(new String[]{"4G", "5G"});
         cmbEstado = new JComboBox<>(new String[]{"Activa", "Suspendida", "Cancelada"});
         cmbTipoSIM = new JComboBox<>(new String[]{"eSIM", "Fisica"});
 
@@ -267,9 +269,12 @@ public class LineaMovilPanel extends JPanel {
                     "Campos requeridos", JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        if (!fecha.matches("\\d{4}-\\d{2}-\\d{2}")) {
+        try {
+            LocalDate.parse(fecha);
+        } catch (DateTimeParseException ex) {
             JOptionPane.showMessageDialog(this,
-                    "⚠ La fecha debe tener formato YYYY-MM-DD.", "Formato inválido", JOptionPane.WARNING_MESSAGE);
+                    "⚠ La fecha de activación no es válida. Use formato YYYY-MM-DD.",
+                    "Fecha inválida", JOptionPane.WARNING_MESSAGE);
             return null;
         }
         return new LineaMovil(num, cli != null ? cli.getCedula() : "",
