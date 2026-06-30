@@ -50,7 +50,7 @@ public class ConsultasDAO {
         String sql
                 = "SELECT c.Cedula, UPPER(c.Nombre) AS Nombre, UPPER(c.Apellidos) AS Apellidos, "
                 + "c.TipoCliente, lm.NumTelefonico, lm.TipoLinea, lm.Tecnologia, "
-                + "pt.Nombre AS Plan, pt.CuotaMensual "
+                + "pt.Nombre AS NombrePlan, pt.CuotaMensual "
                 + "FROM Cliente c "
                 + "INNER JOIN Linea_Movil lm ON c.Cedula = lm.Cedula "
                 + "INNER JOIN Historia_Plan hp ON lm.NumTelefonico = hp.NumTelefonico "
