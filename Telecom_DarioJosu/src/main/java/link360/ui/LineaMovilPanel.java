@@ -14,12 +14,6 @@ import java.awt.*;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableCellRenderer;
 
-/**
- * CRUD panel for the Linea_Movil table. FK to Cliente (Cedula) is resolved via
- * a dropdown.
- *
- * @author Link360 Project
- */
 public class LineaMovilPanel extends JPanel {
 
     private final LineaMovilDAO lineaDAO = new LineaMovilDAO();
@@ -94,9 +88,9 @@ public class LineaMovilPanel extends JPanel {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(24);
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setBackground(new Color(41, 128, 185)); 
-        headerRenderer.setForeground(Color.WHITE);             
-        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); 
+        headerRenderer.setBackground(new Color(41, 128, 185));
+        headerRenderer.setForeground(Color.WHITE);
+        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
 
         headerRenderer.setHorizontalAlignment(JLabel.CENTER);
 

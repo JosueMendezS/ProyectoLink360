@@ -8,39 +8,8 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-/**
- *
- * DAO for complex SELECT queries (JOINs, aggregates, VIEW and audit trail).
- *
- * Each method returns a List of Object[] rows for display in a JTable.
- *
- *
- *
- * SQL operators used:
- *
- * Studied in class : SUM, AVG, COUNT, INNER JOIN, LEFT JOIN, GROUP BY, ORDER BY
- *
- * NOT studied (extra): UPPER() / UCASE equivalent via UPPER(), DATEDIFF(),
- * ISNULL()
- *
- *
- *
- * @author Link360 Project
- *
- */
 public class ConsultasDAO {
 
-    /**
-     *
-     * Q1 – Clients with their active mobile lines and current plan.
-     *
-     * Uses INNER JOIN across Cliente, Linea_Movil, Historia_Plan and
-     * Plan_Tarifario.
-     *
-     * Uses ISNULL() (operator not covered in class) to handle nullable
-     * FechaFin.
-     *
-     */
     public static final String[] HEADERS_Q1
             = {"Cédula", "Nombre", "Apellidos", "Tipo Cliente", "Teléfono", "Tipo Línea",
                 "Tecnología", "Plan Actual", "Cuota Mensual (₡)"};
@@ -63,14 +32,6 @@ public class ConsultasDAO {
 
     }
 
-    /**
-     *
-     * Q2 – Billing summary per client: total billed, average invoice, pending
-     * count.
-     *
-     * Uses SUM, AVG, COUNT (operators studied in class).
-     *
-     */
     public static final String[] HEADERS_Q2
             = {"Cédula", "Nombre", "Cant. Facturas", "Total Facturado (₡)", "Promedio Factura (₡)",
                 "Facturas Pendientes"};
@@ -93,16 +54,6 @@ public class ConsultasDAO {
 
     }
 
-    /**
-     *
-     * Q3 – Services contracted per line with their status and monthly cost.
-     *
-     * Uses INNER JOIN across Linea_Movil, Contrat_Servicio, Servicio.
-     *
-     * Uses DATEDIFF() (operator not covered in class) to show days since
-     * contract.
-     *
-     */
     public static final String[] HEADERS_Q3
             = {"Teléfono", "Cédula Cliente", "Servicio", "Categoría", "Costo (₡)",
                 "Estado Contrato", "Días Contratado"};
@@ -122,15 +73,6 @@ public class ConsultasDAO {
 
     }
 
-    /**
-     *
-     * Q4 – Active promotions with their type and maximum allowed discount.
-     *
-     * Uses INNER JOIN between Promocion and Tipo_Promo.
-     *
-     * Uses GETDATE() to filter currently active promotions.
-     *
-     */
     public static final String[] HEADERS_Q4
             = {"Código", "Promoción", "Tipo", "% Descuento", "% Máx Permitido",
                 "Inicio", "Fin", "Días Restantes"};
@@ -150,15 +92,6 @@ public class ConsultasDAO {
 
     }
 
-    /**
-     *
-     * Q5 – Consumption details per line (calls, SMS, data, roaming).
-     *
-     * Uses LEFT JOIN to include all consumption types.
-     *
-     * Uses ISNULL to replace NULL end-times with a label.
-     *
-     */
     public static final String[] HEADERS_Q5
             = {"Teléfono", "Tipo Consumo", "Ámbito", "Inicio", "Fin", "Cantidad", "Costo (₡)"};
 
@@ -176,14 +109,6 @@ public class ConsultasDAO {
 
     }
 
-    /**
-     *
-     * VIEW – Queries the view VW_HistorialPlanesServiciosActivos created in the
-     * physical model.
-     *
-     * Shows consolidated history of plans and active services per line.
-     *
-     */
     public static final String[] HEADERS_VIEW
             = {"Teléfono", "Cédula", "Tipo Línea", "Plan", "Cuota (₡)", "Inicio Plan",
                 "Servicio", "Categoría", "Costo Servicio (₡)", "Estado Contrato"};
@@ -196,13 +121,6 @@ public class ConsultasDAO {
 
     }
 
-    /**
-     *
-     * AUDIT – Reads audit trail columns (UsuarioCreacion, FechaCreacion, Estado)
-     *
-     * from the Cliente table as a sample of the audit mechanism.
-     *
-     */
     public static final String[] HEADERS_AUDIT
             = {"Cédula", "Nombre", "Tipo", "Creado Por", "Fecha Creación", "Estado Registro"};
 
@@ -219,13 +137,6 @@ public class ConsultasDAO {
 
     }
 
-    // ── Shared query executor ──────────────────────────────────────────────────
-    /**
-     *
-     * Executes any SELECT and returns rows as Object[] lists (suitable for
-     * JTable).
-     *
-     */
     private List<Object[]> executeQuery(String sql) throws SQLException, ClassNotFoundException {
 
         List<Object[]> rows = new ArrayList<>();

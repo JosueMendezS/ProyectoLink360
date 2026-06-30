@@ -10,19 +10,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-/**
- *
- * DAO for the Linea_Movil table. Full CRUD operations.
- *
- * Cascade note: deleting a Linea_Movil may affect Consumo, Contrat_Servicio,
- *
- * Historia_Plan, Adquis_Paquete and Factura
- *
- *
- *
- * @author Link360 Project
- *
- */
 public class LineaMovilDAO {
 
     private static final String SQL_INSERT

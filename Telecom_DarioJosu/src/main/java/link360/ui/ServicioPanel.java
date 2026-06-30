@@ -10,11 +10,6 @@ import java.awt.*;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableCellRenderer;
 
-/**
- * CRUD panel for the Servicio table.
- *
- * @author Link360 Project
- */
 public class ServicioPanel extends JPanel {
 
     private final ServicioDAO servicioDAO = new ServicioDAO();
@@ -89,9 +84,9 @@ public class ServicioPanel extends JPanel {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(24);
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setBackground(new Color(41, 128, 185)); 
-        headerRenderer.setForeground(Color.WHITE);             
-        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); 
+        headerRenderer.setBackground(new Color(41, 128, 185));
+        headerRenderer.setForeground(Color.WHITE);
+        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
 
         headerRenderer.setHorizontalAlignment(JLabel.CENTER);
 

@@ -10,13 +10,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-/**
- *
- * DAO for the Servicio table. Full CRUD.
- *
- * @author Link360 Project
- *
- */
 public class ServicioDAO {
 
     private static final String SQL_INSERT

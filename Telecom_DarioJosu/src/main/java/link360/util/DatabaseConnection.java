@@ -8,12 +8,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/**
- * Maneja la conexion a la base de datos. Las credenciales NO van en el codigo:
- * se leen de db.properties (en la raiz del proyecto, junto al pom.xml). Ese
- * archivo no debe subirse al repositorio; se incluye db.properties.example como
- * plantilla.
- */
 public class DatabaseConnection {
 
     private static final String CONFIG_FILE = "db.properties";

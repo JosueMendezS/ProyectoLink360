@@ -6,8 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class DistritoDAO {
+
     public List<Distrito> findAll() throws SQLException, ClassNotFoundException {
         List<Distrito> list = new ArrayList<>();
         String sql = "SELECT CodDistrito, NombreDistrito, CodCanton FROM Distrito ORDER BY NombreDistrito";
@@ -15,8 +15,8 @@ public class DistritoDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(new Distrito(rs.getInt("CodDistrito"),
-                                      rs.getString("NombreDistrito"),
-                                      rs.getInt("CodCanton")));
+                        rs.getString("NombreDistrito"),
+                        rs.getInt("CodCanton")));
             }
         }
         return list;

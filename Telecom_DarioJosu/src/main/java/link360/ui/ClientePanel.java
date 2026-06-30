@@ -14,29 +14,19 @@ import java.awt.*;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * CRUD panel for the Cliente table. FKs (CodDistrito) are handled via a
- * dropdown — the user never types a key directly.
- *
- * @author Link360 Project
- */
 public class ClientePanel extends JPanel {
 
-    // ── DAOs ──────────────────────────────────────────────────────────────────
     private final ClienteDAO clienteDAO = new ClienteDAO();
     private final DistritoDAO distritoDAO = new DistritoDAO();
 
-    // ── Form fields ───────────────────────────────────────────────────────────
     private JTextField txtCedula, txtNombre, txtApellidos, txtFechaIngreso, txtDireccion;
     private JComboBox<String> cmbTipoCliente;
     private JComboBox<Distrito> cmbDistrito;
 
-    // ── Table ─────────────────────────────────────────────────────────────────
     private JTable table;
     private DefaultTableModel tableModel;
 
-    // ── State ─────────────────────────────────────────────────────────────────
-    private boolean editMode = false;   // true when updating an existing row
+    private boolean editMode = false;
 
     public ClientePanel() {
         setLayout(new BorderLayout(10, 10));
@@ -49,7 +39,6 @@ public class ClientePanel extends JPanel {
         loadTable();
     }
 
-    // ── Form builder ──────────────────────────────────────────────────────────
     private JPanel buildForm() {
         JPanel p = new JPanel(new GridBagLayout());
         p.setBackground(Color.WHITE);
@@ -66,15 +55,12 @@ public class ClientePanel extends JPanel {
         cmbTipoCliente = new JComboBox<>(new String[]{"Bronce", "Plata", "Oro", "Platino"});
         cmbDistrito = new JComboBox<>();
 
-        // Row 0
         addField(p, gbc, "Cédula *", txtCedula, 0, 0);
         addField(p, gbc, "Nombre *", txtNombre, 0, 2);
         addField(p, gbc, "Apellidos *", txtApellidos, 0, 4);
-        // Row 1
         addField(p, gbc, "Fecha Ingreso *\n(YYYY-MM-DD)", txtFechaIngreso, 1, 0);
         addField(p, gbc, "Tipo Cliente *", cmbTipoCliente, 1, 2);
         addField(p, gbc, "Distrito *", cmbDistrito, 1, 4);
-        // Row 2
         gbc.gridx = 0;
         gbc.gridy = 2;
         p.add(new JLabel("Dirección:"), gbc);
@@ -97,7 +83,6 @@ public class ClientePanel extends JPanel {
         p.add(field, gbc);
     }
 
-    // ── Table builder ─────────────────────────────────────────────────────────
     private JScrollPane buildTable() {
         tableModel = new DefaultTableModel(
                 new String[]{"Cédula", "Nombre", "Apellidos", "Fecha Ingreso",
@@ -110,16 +95,15 @@ public class ClientePanel extends JPanel {
         table = new JTable(tableModel);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(24);
-DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-headerRenderer.setBackground(new Color(41, 128, 185)); // Color azul de fondo
-headerRenderer.setForeground(Color.WHITE);             // Letra blanca
-headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); // Letra negrita
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setBackground(new Color(41, 128, 185));
+        headerRenderer.setForeground(Color.WHITE);
+        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
 
-headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
-table.getTableHeader().setDefaultRenderer(headerRenderer);
+        table.getTableHeader().setDefaultRenderer(headerRenderer);
 
-        // When the user clicks a row, populate the form
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 populateFormFromTable();
@@ -129,7 +113,6 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
         return new JScrollPane(table);
     }
 
-    // ── Button bar ────────────────────────────────────────────────────────────
     private JPanel buildButtons() {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 6));
         p.setBackground(new Color(245, 247, 250));
@@ -165,7 +148,6 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
         return b;
     }
 
-    // ── Data loaders ──────────────────────────────────────────────────────────
     private void loadDistritos() {
         try {
             List<Distrito> distritos = distritoDAO.findAll();
@@ -194,7 +176,6 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
         }
     }
 
-    // ── Form ↔️ table sync ─────────────────────────────────────────────────────
     private void populateFormFromTable() {
         int row = table.getSelectedRow();
         if (row < 0) {
@@ -206,7 +187,6 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
         txtFechaIngreso.setText(str(tableModel.getValueAt(row, 3)));
         cmbTipoCliente.setSelectedItem(str(tableModel.getValueAt(row, 4)));
         txtDireccion.setText(str(tableModel.getValueAt(row, 5)));
-        // Select matching distrito
         int codDist = (int) tableModel.getValueAt(row, 6);
         for (int i = 0; i < cmbDistrito.getItemCount(); i++) {
             if (cmbDistrito.getItemAt(i).getCodDistrito() == codDist) {
@@ -214,7 +194,7 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
                 break;
             }
         }
-        txtCedula.setEditable(false);   // PK cannot change on edit
+        txtCedula.setEditable(false);
         editMode = true;
     }
 
@@ -238,11 +218,10 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
         txtCedula.requestFocus();
     }
 
-    // ── CRUD operations ───────────────────────────────────────────────────────
     private void saveRecord() {
         Cliente c = buildClienteFromForm();
         if (c == null) {
-            return;   // validation failed
+            return;
         }
         try {
             if (editMode) {
@@ -274,7 +253,6 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
         String cedula = str(tableModel.getValueAt(row, 0));
         String nombre = str(tableModel.getValueAt(row, 1)) + " " + str(tableModel.getValueAt(row, 2));
 
-        // ⚠ WARN about cascade effects (requirement iv)
         int confirm = JOptionPane.showConfirmDialog(this,
                 "⚠ ADVERTENCIA DE BORRADO EN CASCADA\n\n"
                 + "Está por eliminar al cliente: " + nombre + " (" + cedula + ")\n\n"
@@ -302,7 +280,6 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
         }
     }
 
-    // ── Validation & object builder ───────────────────────────────────────────
     private Cliente buildClienteFromForm() {
         String cedula = txtCedula.getText().trim();
         String nombre = txtNombre.getText().trim();
@@ -312,14 +289,12 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
         String dir = txtDireccion.getText().trim();
         Distrito dist = (Distrito) cmbDistrito.getSelectedItem();
 
-        // Mandatory field validation (NN constraints)
         if (cedula.isEmpty() || nombre.isEmpty() || apellidos.isEmpty() || fecha.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "⚠ Los campos Cédula, Nombre, Apellidos y Fecha de Ingreso son obligatorios.",
                     "Campos requeridos", JOptionPane.WARNING_MESSAGE);
             return null;
         }
-        // Date format validation
         if (!fecha.matches("\\d{4}-\\d{2}-\\d{2}")) {
             JOptionPane.showMessageDialog(this,
                     "⚠ La fecha debe tener el formato YYYY-MM-DD (ejemplo: 2025-06-15).",
@@ -352,7 +327,6 @@ table.getTableHeader().setDefaultRenderer(headerRenderer);
 
     }
 
-    // ── Helper ────────────────────────────────────────────────────────────────
     private String str(Object o) {
         return o == null ? "" : o.toString();
     }

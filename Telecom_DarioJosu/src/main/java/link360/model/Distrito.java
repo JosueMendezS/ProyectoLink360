@@ -1,6 +1,7 @@
 package link360.model;
 
 public class Distrito {
+
     private int codDistrito;
     private String nombreDistrito;
     private int codCanton;
@@ -10,8 +11,21 @@ public class Distrito {
         this.nombreDistrito = nombreDistrito;
         this.codCanton = codCanton;
     }
-    public int    getCodDistrito()    { return codDistrito; }
-    public String getNombreDistrito() { return nombreDistrito; }
-    public int    getCodCanton()      { return codCanton; }
-    @Override public String toString() { return codDistrito + " – " + nombreDistrito; }
+
+    public int getCodDistrito() {
+        return codDistrito;
+    }
+
+    public String getNombreDistrito() {
+        return nombreDistrito;
+    }
+
+    public int getCodCanton() {
+        return codCanton;
+    }
+
+    @Override
+    public String toString() {
+        return codDistrito + " – " + nombreDistrito;
+    }
 }

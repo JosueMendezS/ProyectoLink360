@@ -10,15 +10,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-/**
- *
- * DAO for the Factura table. Full CRUD.
- *
- * NumFactura is IDENTITY — the DB generates it on INSERT.
- *
- * @author Link360 Project
- *
- */
 public class FacturaDAO {
 
     private static final String SQL_INSERT
@@ -192,10 +183,10 @@ public class FacturaDAO {
 
         Date fecha = rs.getDate("Fecha");
         f.setFecha(fecha != null ? fecha.toString() : "");
-        
+
         Date fechaVenc = rs.getDate("FechaVencimiento");
         f.setFechaVencimiento(fechaVenc != null ? fechaVenc.toString() : "");
-        
+
         Date fechaPago = rs.getDate("FechaPago");
         f.setFechaPago(fechaPago != null ? fechaPago.toString() : null);
 

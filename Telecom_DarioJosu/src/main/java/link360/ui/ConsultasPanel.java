@@ -8,18 +8,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-/**
- * Panel that displays the 5 complex queries, the business view, and the audit
- * trail. All queries use JOINs. Some use SQL operators not covered in class
- * (UPPER, DATEDIFF, ISNULL).
- *
- * @author Link360 Project
- */
 public class ConsultasPanel extends JPanel {
 
     private final ConsultasDAO dao = new ConsultasDAO();
 
-    // Table for displaying query results
     private JTable table;
     private DefaultTableModel tableModel;
     private JLabel lblQueryTitle;
@@ -34,13 +26,11 @@ public class ConsultasPanel extends JPanel {
         add(buildResultPanel(), BorderLayout.CENTER);
     }
 
-    // ── Query selector ────────────────────────────────────────────────────────
     private JPanel buildSelectorPanel() {
         JPanel outer = new JPanel(new BorderLayout(5, 5));
         outer.setBackground(Color.WHITE);
         outer.setBorder(BorderFactory.createTitledBorder("Seleccione una consulta"));
 
-        // Description area
         txtQueryDescription = new JTextArea(3, 60);
         txtQueryDescription.setEditable(false);
         txtQueryDescription.setLineWrap(true);
@@ -49,7 +39,6 @@ public class ConsultasPanel extends JPanel {
         txtQueryDescription.setFont(new Font("SansSerif", Font.ITALIC, 12));
         txtQueryDescription.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
 
-        // Buttons for each query
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 6));
         btnPanel.setBackground(Color.WHITE);
 
@@ -115,7 +104,6 @@ public class ConsultasPanel extends JPanel {
         return b;
     }
 
-    // ── Result table ──────────────────────────────────────────────────────────
     private JPanel buildResultPanel() {
         JPanel p = new JPanel(new BorderLayout(5, 5));
         p.setBackground(new Color(245, 247, 250));
@@ -130,31 +118,29 @@ public class ConsultasPanel extends JPanel {
                 return false;
             }
         };
-        
+
         table = new JTable(tableModel);
         table.setRowHeight(24);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        
+
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setBackground(new Color(44, 62, 80)); 
-        headerRenderer.setForeground(Color.WHITE);           
-        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); 
-        
+        headerRenderer.setBackground(new Color(44, 62, 80));
+        headerRenderer.setForeground(Color.WHITE);
+        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
+
         headerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        
+
         table.getTableHeader().setDefaultRenderer(headerRenderer);
 
         p.add(lblQueryTitle, BorderLayout.NORTH);
         p.add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // Row count label at the bottom
         JLabel lblCount = new JLabel(" ");
         lblCount.setName("rowCount");
         p.add(lblCount, BorderLayout.SOUTH);
         return p;
     }
 
-    // ── Query runners ─────────────────────────────────────────────────────────
     private void runQ1() {
         runQuery("Q1 – Clientes con líneas activas y plan vigente",
                 ConsultasDAO.HEADERS_Q1,
@@ -197,7 +183,6 @@ public class ConsultasPanel extends JPanel {
                 () -> dao.queryAuditTrail());
     }
 
-    // ── Shared executor ───────────────────────────────────────────────────────
     @FunctionalInterface
     interface QuerySupplier {
 
@@ -217,11 +202,9 @@ public class ConsultasPanel extends JPanel {
             for (Object[] row : rows) {
                 tableModel.addRow(row);
             }
-            // Auto-fit columns
             for (int col = 0; col < table.getColumnCount(); col++) {
                 table.getColumnModel().getColumn(col).setPreferredWidth(140);
             }
-            // Show row count in the bottom label
             Component c = ((JPanel) getComponent(1)).getComponent(2);
             if (c instanceof JLabel) {
                 ((JLabel) c).setText("  Total de registros: " + rows.size());

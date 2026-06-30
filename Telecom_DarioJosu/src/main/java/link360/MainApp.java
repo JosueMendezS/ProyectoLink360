@@ -11,10 +11,6 @@ import link360.ui.ServicioPanel;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Punto de entrada de la aplicacion. Arma la ventana principal con un
- * JTabbedPane que agrupa cada panel CRUD y el panel de consultas.
- */
 public class MainApp {
 
     public static void main(String[] args) {

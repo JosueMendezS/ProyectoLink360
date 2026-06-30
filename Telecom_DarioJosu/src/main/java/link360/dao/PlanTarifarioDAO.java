@@ -10,13 +10,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-/**
- *
- * DAO for Plan_Tarifario table. Full CRUD.
- *
- * @author Link360 Project
- *
- */
 public class PlanTarifarioDAO {
 
     private static final String SQL_INSERT

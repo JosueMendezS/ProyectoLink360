@@ -9,7 +9,6 @@ import java.util.List;
 
 public class ClienteDAO {
 
-    // ── SQL statements
     private static final String SQL_INSERT
             = "INSERT INTO Cliente (Cedula, Nombre, Apellidos, FechaIngreso, TipoCliente, Direccion, CodDistrito) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -29,7 +28,6 @@ public class ClienteDAO {
     private static final String SQL_DELETE
             = "DELETE FROM Cliente WHERE Cedula = ?";
 
-    // ── INSERT 
     public void insert(Cliente client) throws SQLException, ClassNotFoundException {
         Connection conn = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement ps = conn.prepareStatement(SQL_INSERT)) {
@@ -48,7 +46,6 @@ public class ClienteDAO {
         }
     }
 
-    // ── SELECT ALL 
     public List<Cliente> findAll() throws SQLException, ClassNotFoundException {
         List<Cliente> list = new ArrayList<>();
         Connection conn = DatabaseConnection.getInstance().getConnection();
@@ -60,7 +57,6 @@ public class ClienteDAO {
         return list;
     }
 
-    // ── SELECT BY PK
     public Cliente findById(String cedula) throws SQLException, ClassNotFoundException {
         Connection conn = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement ps = conn.prepareStatement(SQL_SELECT_BY_ID)) {
@@ -74,7 +70,6 @@ public class ClienteDAO {
         return null;
     }
 
-    // ── UPDATE 
     public void update(Cliente client) throws SQLException, ClassNotFoundException {
         Connection conn = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
@@ -93,7 +88,6 @@ public class ClienteDAO {
         }
     }
 
-    // ── DELETE 
     public void delete(String cedula) throws SQLException, ClassNotFoundException {
         Connection conn = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement ps = conn.prepareStatement(SQL_DELETE)) {

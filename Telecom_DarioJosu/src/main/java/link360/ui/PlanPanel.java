@@ -10,25 +10,18 @@ import java.awt.*;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableCellRenderer;
 
-/**
- * CRUD panel for the Plan_Tarifario table. IdCateg FK is chosen via a JComboBox
- * showing category descriptions.
- *
- * @author Link360 Project
- */
 public class PlanPanel extends JPanel {
 
     private final PlanTarifarioDAO planDAO = new PlanTarifarioDAO();
 
     private JTextField txtCodPlan, txtNombre, txtDescripcion, txtCuota,
             txtGb, txtMin, txtMsg, txtCostoExceso;
-    private JComboBox<String> cmbCateg;  // values: "1-Basico", "2-Premium"
+    private JComboBox<String> cmbCateg;
 
     private JTable table;
     private DefaultTableModel tableModel;
     private boolean editMode = false;
 
-    // Category map (id -> description). Matches Categ_Plan seed data.
     private static final Object[][] CATEGORIAS = {
         {1, "Plan Básico (50 Mbps)"},
         {2, "Plan Premium (200 Mbps)"}
@@ -103,9 +96,9 @@ public class PlanPanel extends JPanel {
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(24);
         DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-       headerRenderer.setBackground(new Color(41, 128, 185)); 
-        headerRenderer.setForeground(Color.WHITE);             
-        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD)); 
+        headerRenderer.setBackground(new Color(41, 128, 185));
+        headerRenderer.setForeground(Color.WHITE);
+        headerRenderer.setFont(table.getTableHeader().getFont().deriveFont(Font.BOLD));
 
         headerRenderer.setHorizontalAlignment(JLabel.CENTER);
 

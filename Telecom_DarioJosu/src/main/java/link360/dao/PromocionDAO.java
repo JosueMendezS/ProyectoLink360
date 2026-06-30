@@ -10,13 +10,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-/**
- *
- * DAO for the Promocion table. Full CRUD.
- *
- * @author Link360 Project
- *
- */
 public class PromocionDAO {
 
     private static final String SQL_INSERT
@@ -143,17 +136,17 @@ public class PromocionDAO {
 
     }
 
-    private Promocion mapRow(ResultSet rs) throws SQLException { 
-    Date fi = rs.getDate("FechaInicio"); 
-    Date ff = rs.getDate("FechaFin"); 
-    return new Promocion( 
-            rs.getString("CodPromocion"), 
-            rs.getString("Nombre"), 
-            rs.getString("Descripcion"), 
-            fi != null ? fi.toString() : "", 
-            ff != null ? ff.toString() : null, 
-            rs.getDouble("PctDescuento"), 
-            rs.getInt("IdTipoPromo")); 
-}
+    private Promocion mapRow(ResultSet rs) throws SQLException {
+        Date fi = rs.getDate("FechaInicio");
+        Date ff = rs.getDate("FechaFin");
+        return new Promocion(
+                rs.getString("CodPromocion"),
+                rs.getString("Nombre"),
+                rs.getString("Descripcion"),
+                fi != null ? fi.toString() : "",
+                ff != null ? ff.toString() : null,
+                rs.getDouble("PctDescuento"),
+                rs.getInt("IdTipoPromo"));
+    }
 
 }
